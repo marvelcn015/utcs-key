@@ -29,10 +29,10 @@ jobs:
 
       # ESLint and Prettier must be in `package.json`
       - name: Install Node.js dependencies
-        run: npm ci
+        run: pnpm ci
 
       - name: Eslint
-        run: npm run lint
+        run: pnpm run lint
 
       - name: Prettier
-        run: npm run format:check
+        run: pnpm run format:check
