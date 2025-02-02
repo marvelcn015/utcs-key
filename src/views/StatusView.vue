@@ -1,9 +1,9 @@
 <script setup>
-    import StatusBar from '@/components/StatusBar.vue';
+import StatusBar from '@/components/StatusBar.vue'
 </script>
 
 <template>
-    <StatusBar/>
+  <StatusBar />
 </template>
 
 <style scoped></style>

@@ -1,41 +1,46 @@
 <script setup>
-import { ref, onMounted } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { ref, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 
-const route = useRoute();
-const router = useRouter();
+const route = useRoute()
+const router = useRouter()
 
 // 控制不同訊息的顯示狀態
-const statusOk = ref(false);
-const statusError = ref(false);
-const statusNotIntranet = ref(false);
-const statusNoIpLimitSystem = ref(false);
+const statusOk = ref(false)
+const statusError = ref(false)
+const statusNotIntranet = ref(false)
+const statusNoIpLimitSystem = ref(false)
 
 onMounted(() => {
-  const status = route.query.status;
+  const status = route.query.status
 
-  if (status === "ok") {
-    statusOk.value = true;
-  } else if (status === "notintanet") {
-    statusNotIntranet.value = true;
-  } else if (status === "noiplimitsystem") {
-    statusNoIpLimitSystem.value = true;
+  if (status === 'ok') {
+    statusOk.value = true
+  } else if (status === 'notintanet') {
+    statusNotIntranet.value = true
+  } else if (status === 'noiplimitsystem') {
+    statusNoIpLimitSystem.value = true
   } else {
-    statusError.value = true;
+    statusError.value = true
   }
 
   // 5秒後自動導向首頁
   setTimeout(() => {
-    router.push("/");
-  }, 5000);
-});
+    router.push('/')
+  }, 5000)
+})
 </script>
 
 <template>
   <nav class="navbar navbar-expand-md bg-dark navbar-dark">
     <RouterLink class="navbar-brand" to="/">UTCS 物品借用系統</RouterLink>
 
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#collapsibleNavbar"
+    >
       <span class="navbar-toggler-icon"></span>
     </button>
   </nav>
