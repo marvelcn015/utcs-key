@@ -43,7 +43,7 @@ const LoadData = () => {
 </script>
 
 <template>
-  <div class="d-flex justify-content-center align-items-center container" style="height: 120vh;">
+  <div class="d-flex justify-content-center align-items-center container" style="height: 120vh">
     <div class="row">
       <form action="externalapply.php" method="post" class="needs-validation" novalidate>
         <h3>系外訪客借用</h3>

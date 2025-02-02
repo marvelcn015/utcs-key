@@ -25,7 +25,7 @@ setInterval(flushTime, 1000)
 </script>
 
 <template>
-  <div class="d-flex justify-content-center align-items-center container" style="height: 100vh;">
+  <div class="d-flex justify-content-center align-items-center container" style="height: 100vh">
     <div class="col-12">
       <ul class="nav nav-tabs">
         <li class="nav-item">
@@ -73,7 +73,7 @@ setInterval(flushTime, 1000)
             <div class="row">
               <form action="myut.php" method="post" class="needs-validation" novalidate>
                 <div class="form-group">
-                  <br>
+                  <br />
                   <label for="keynumber-myut">物品條碼:</label>
                   <input
                     type="text"
@@ -133,7 +133,7 @@ setInterval(flushTime, 1000)
             <div class="row">
               <form action="borrow.php" method="post" class="needs-validation" novalidate>
                 <div class="form-group">
-                  <br>
+                  <br />
                   <label for="keynumber-id">物品條碼:</label>
                   <input
                     type="text"
