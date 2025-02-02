@@ -1,7 +1,9 @@
-<script setup></script>
+<script setup>
+  import NavigationBar from '@/components/NavigationBar.vue';
+</script>
 
 <template>
-  <div class="container"></div>
+  <NavigationBar/>
 </template>
 
 <style scoped></style>
