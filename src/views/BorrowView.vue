@@ -1,174 +1,84 @@
 <script setup>
-import { RouterLink } from 'vue-router'
+import { ref, onMounted, onUnmounted } from 'vue'
+import NavigationBar from '@/components/NavigationBar.vue'
+import DepartmentBorrow from '@/components/Borrow/DepartmentBorrow.vue'
+import ExternalBorrow from '@/components/Borrow/ExternalBorrow.vue'
+import { useTimeManager } from '@/utils/flushTime'
 
-function flushTime() {
-  var currentdate = new Date()
-  var datetime =
-    currentdate.getFullYear() +
-    '/' +
-    (currentdate.getMonth() + 1) +
-    '/' +
-    currentdate.getDate() +
-    ' ' +
-    currentdate.getHours() +
-    ':' +
-    currentdate.getMinutes()
+const { ts, tsshow, startTimer, stopTimer } = useTimeManager()
+const activeTab = ref('internal')
 
-  document.getElementById('ts1').value = datetime
-  document.getElementById('tsshow1').value = datetime
-
-  document.getElementById('ts2').value = datetime
-  document.getElementById('tsshow2').value = datetime
+const switchTab = (tab) => {
+  activeTab.value = tab
 }
 
-setInterval(flushTime, 1000)
+onMounted(() => {
+  startTimer()
+})
+
+onUnmounted(() => {
+  stopTimer()
+})
 </script>
 
 <template>
-  <div class="d-flex justify-content-center align-items-center container" style="height: 100vh">
-    <div class="col-12">
-      <ul class="nav nav-tabs">
-        <li class="nav-item">
-          <button
-            class="nav-link active"
-            id="MYUT-tab"
-            data-bs-toggle="tab"
-            data-bs-target="#MYUT-pane"
-            type="button"
-            role="tab"
-            aria-controls="MYUT-pane"
-            aria-selected="true"
-          >
-            校務系統認證(限系上)
-          </button>
-        </li>
-        <li class="nav-item">
-          <button
-            class="nav-link"
-            id="ID-tab"
-            data-bs-toggle="tab"
-            data-bs-target="#ID-pane"
-            type="button"
-            role="tab"
-            aria-controls="ID-pane"
-            aria-selected="false"
-          >
-            身分證認證(限系上)
-          </button>
-        </li>
-        <li class="nav-item">
-          <RouterLink to="/externalborrow" class="nav-link">系外訪客</RouterLink>
-        </li>
-      </ul>
+  <NavigationBar />
 
-      <div class="tab-content">
-        <!-- 校務系統認證 -->
-        <div
-          class="tab-pane container fade show active"
-          id="MYUT-pane"
-          role="tabpanel"
-          aria-labelledby="MYUT-tab"
-        >
-          <div class="d-flex justify-content-center align-items-center container">
-            <div class="row">
-              <form action="myut.php" method="post" class="needs-validation" novalidate>
-                <div class="form-group">
-                  <br />
-                  <label for="keynumber-myut">物品條碼:</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="keynumber-myut"
-                    name="keynumber"
-                    required
-                    placeholder="請輸入該教室的代號"
-                  />
-                  <div class="invalid-feedback">請輸入教室代號，例如:G508。</div>
-                  <br />
+  <div class="container-fluid min-vh-80 py-5">
+    <div class="row justify-content-center align-items-center h-100">
+      <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+        <div class="card shadow-lg border-0 rounded-lg">
+          <div class="card-header bg-dark bg-gradient text-white">
+            <h3 class="text-center font-weight-bold my-2">
+              <i class="bi bi-key-fill me-2"></i>借用鑰匙
+            </h3>
+          </div>
+
+          <div class="card-body p-4">
+            <!-- 標籤切換區域 -->
+            <div class="nav-container mb-4">
+              <div class="nav nav-pills nav-justified" role="tablist">
+                <button
+                  class="nav-link"
+                  :class="{ active: activeTab === 'internal' }"
+                  @click="switchTab('internal')"
+                  type="button"
+                  role="tab"
+                  aria-selected="activeTab === 'internal'"
+                >
+                  <i class="bi bi-person-badge me-2"></i>校務系統認證
+                </button>
+                <button
+                  class="nav-link"
+                  :class="{ active: activeTab === 'external' }"
+                  @click="switchTab('external')"
+                  type="button"
+                  role="tab"
+                  aria-selected="activeTab === 'external'"
+                >
+                  <i class="bi bi-person-plus me-2"></i>系外訪客
+                </button>
+              </div>
+            </div>
+
+            <!-- 表單內容區域 -->
+            <div class="tab-content">
+              <Transition name="fade" mode="out-in">
+                <div v-if="activeTab === 'internal'" key="internal" class="tab-pane active">
+                  <DepartmentBorrow :ts="ts" :tsshow="tsshow" />
                 </div>
-
-                <div class="form-group">
-                  <label for="uid">校務系統帳號 (Account):</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="uid"
-                    name="uid"
-                    required
-                    placeholder="請輸入借用者帳號"
-                  />
-                  <div class="invalid-feedback">請輸入正確的校務系統帳號。</div>
-                  <br />
+                <div v-else key="external" class="tab-pane active">
+                  <ExternalBorrow :ts="ts" :tsshow="tsshow" />
                 </div>
-
-                <div class="form-group">
-                  <label for="password">校務系統密碼 (Password):</label>
-                  <input
-                    type="password"
-                    class="form-control"
-                    id="password"
-                    name="password"
-                    required
-                    placeholder="請輸入借用者密碼"
-                  />
-                  <div class="invalid-feedback">請輸入正確的校務系統密碼。</div>
-                  <br />
-                </div>
-
-                <div class="form-group">
-                  <label for="tsshow1">當前時間:</label>
-                  <input type="text" class="form-control" id="tsshow1" name="tsshow" disabled />
-                  <input type="hidden" id="ts1" name="ts" value="2025/2/2 2:21" /><br />
-                </div>
-
-                <button type="submit" class="btn btn-primary">Submit</button>
-              </form>
+              </Transition>
             </div>
           </div>
-        </div>
 
-        <!-- 身分證認證 -->
-        <div class="tab-pane container fade" id="ID-pane" role="tabpanel" aria-labelledby="ID-tab">
-          <div class="d-flex justify-content-center align-items-center container">
-            <div class="row">
-              <form action="borrow.php" method="post" class="needs-validation" novalidate>
-                <div class="form-group">
-                  <br />
-                  <label for="keynumber-id">物品條碼:</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="keynumber-id"
-                    name="keynumber"
-                    required
-                    placeholder="請輸入教室代號"
-                  />
-                  <div class="invalid-feedback">請輸入教室代號，例如:G508。</div>
-                  <br />
-                </div>
-
-                <div class="form-group">
-                  <label for="idd">身分證 ID / Resident Certificate No. / Passport No.:</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="idd"
-                    name="idd"
-                    required
-                    placeholder="請輸入身分證字號/居留證號碼/護照號碼"
-                  />
-                  <div class="invalid-feedback">請輸入正確的代碼。</div>
-                  <br />
-                </div>
-
-                <div class="form-group">
-                  <label for="tsshow2">當前時間:</label>
-                  <input type="text" class="form-control" id="tsshow2" name="tsshow" disabled />
-                  <input type="hidden" id="ts2" name="ts" value="2025/2/2 2:21" /><br />
-                </div>
-
-                <button type="submit" class="btn btn-primary">Submit</button>
-              </form>
+          <!-- 卡片底部提示信息 -->
+          <div class="card-footer text-center py-3 bg-light">
+            <div class="small text-muted">
+              如遇系統問題，請聯繫管理員
+              <i class="bi bi-telephone-fill ms-1"></i>
             </div>
           </div>
         </div>
@@ -178,15 +88,88 @@ setInterval(flushTime, 1000)
 </template>
 
 <style scoped>
+.min-vh-80 {
+  min-height: 80vh;
+}
+
+/* 表單控制項樣式 */
+.form-control:focus {
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+}
+
+/* 導航標籤樣式 */
 .nav-link {
-  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  padding: 0.75rem 1.25rem;
+  font-weight: 500;
+  color: #495057;
 }
 
-.form-label {
-  font-weight: bold;
+.nav-pills .nav-link {
+  border-radius: 0.5rem;
+  margin: 0 0.25rem;
+  border: 0.5px solid #495057;
 }
 
-button {
-  border-radius: 0.5rem;
+.nav-pills .nav-link.active {
+  background-color: #212529;
+  color: white;
+}
+
+.nav-pills .nav-link:not(.active):hover {
+  background-color: #f8f9fa;
+  color: #212529;
+}
+
+/* 標籤切換動畫 */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+/* 響應式設計調整 */
+@media (max-width: 768px) {
+  .card-body {
+    padding: 1.5rem;
+  }
+
+  .nav-pills .nav-link {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  .nav-container {
+    margin-bottom: 1.5rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .container-fluid {
+    padding: 1rem;
+  }
+
+  .card-header h3 {
+    font-size: 1.5rem;
+  }
+
+  .nav-link i {
+    display: none;
+  }
+}
+
+/* 表單切換時的過渡 */
+.tab-pane {
+  width: 100%;
+}
+
+.tab-content {
+  position: relative;
+  min-height: 400px; /* 根據實際表單高度調整 */
 }
 </style>

@@ -1,10 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import HomeView from '../views/HomeView.vue'
-import BorrowView from '@/views/BorrowView.vue'
-import ExternalBorrowView from '@/views/ExternalBorrowView.vue'
+import HomeView from '@/views/HomeView.vue'
+import StatusView from '@/views/StatusView.vue'
 import ReturnView from '@/views/ReturnView.vue'
-import StatusView from '../views/StatusView.vue'
+import BorrowView from '@/views/BorrowView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -28,14 +27,11 @@ const router = createRouter({
       component: BorrowView,
     },
     {
-      path: '/externalborrow',
-      name: 'externalborrow',
-      component: ExternalBorrowView,
-    },
-    {
       path: '/return',
       name: 'return',
       component: ReturnView,
+    },
+    {
       path: '/status',
       name: 'status',
       component: StatusView,
