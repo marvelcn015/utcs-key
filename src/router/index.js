@@ -1,6 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 import HomeView from '../views/HomeView.vue'
+import BorrowView from '@/views/BorrowView.vue'
+import ExternalBorrowView from '@/views/ExternalBorrowView.vue'
+import ReturnView from '@/views/ReturnView.vue'
 import StatusView from '../views/StatusView.vue'
 
 const router = createRouter({
@@ -20,6 +23,19 @@ const router = createRouter({
       component: HomeView,
     },
     {
+      path: '/borrow',
+      name: 'borrow',
+      component: BorrowView,
+    },
+    {
+      path: '/externalborrow',
+      name: 'externalborrow',
+      component: ExternalBorrowView,
+    },
+    {
+      path: '/return',
+      name: 'return',
+      component: ReturnView,
       path: '/status',
       name: 'status',
       component: StatusView,
