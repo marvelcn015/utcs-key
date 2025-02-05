@@ -4,7 +4,7 @@ import NavigationBar from '@/components/NavigationBar.vue'
 
 <template>
   <NavigationBar />
-  <div class="container px-4">
+  <div class="container px-4 py-5 mx-auto">
     <div
       class="bg-white rounded-xl shadow-lg overflow-hidden transform transition-all hover:shadow-xl pt-5"
     >

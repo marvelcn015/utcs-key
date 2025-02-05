@@ -5,10 +5,11 @@ import { useRoute } from 'vue-router'
 const route = useRoute()
 
 const navItems = [
-  { name: '借用 Borrow', path: '/', icon: 'bi-box-arrow-in-right' },
+  { name: '借用 Borrow', path: '/borrow', icon: 'bi-box-arrow-in-right' },
   { name: '歸還 Return', path: '/return', icon: 'bi-box-arrow-in-left' },
   { name: '狀態 Status', path: '/status', icon: 'bi-clipboard-data' },
   { name: '管理 Admin', path: '/admin', icon: 'bi-gear' },
+  { name: '其他 Others', path: '/others', icon: 'bi-three-dots' },
 ]
 
 const currentPath = computed(() => route.path)
