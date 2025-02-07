@@ -97,10 +97,10 @@ onMounted(async () => {
         <table class="table table-hover align-middle mb-0">
           <thead class="table-light">
             <tr>
-                <th class="border-0 px-4">鑰匙編號</th>
-                <th class="border-0 px-4">借用人</th>
-                <th class="border-0 px-4">借用時間</th>
-                <th class="border-0 px-4">歸還時間</th>
+              <th class="border-0 px-4">鑰匙編號</th>
+              <th class="border-0 px-4">借用人</th>
+              <th class="border-0 px-4">借用時間</th>
+              <th class="border-0 px-4">歸還時間</th>
             </tr>
           </thead>
           <tbody>
@@ -201,7 +201,6 @@ onMounted(async () => {
 </template>
 
 <style scoped>
-
 .modal.show {
   display: block;
   background-color: rgba(0, 0, 0, 0.5);
@@ -264,4 +263,3 @@ onMounted(async () => {
   }
 }
 </style>
-
