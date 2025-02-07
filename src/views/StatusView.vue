@@ -200,5 +200,5 @@ onMounted(async () => {
 </template>
 
 <style lang="scss">
-  @use '@/assets/main.scss' as *;
+@use '@/assets/main.scss' as *;
 </style>
