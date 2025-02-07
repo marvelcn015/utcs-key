@@ -200,66 +200,7 @@ onMounted(async () => {
   </div>
 </template>
 
-<style scoped>
-.modal.show {
-  display: block;
-  background-color: rgba(0, 0, 0, 0.5);
-}
-
-.modal-dialog-centered {
-  display: flex;
-  align-items: center;
-  min-height: calc(100% - 1rem);
-}
-
-/* Table styles */
-.table-hover tbody tr:hover {
-  background-color: rgba(0, 0, 0, 0.025);
-}
-
-.table td,
-.table th {
-  padding: 1rem;
-  vertical-align: middle;
-}
-
-/* Badge styles */
-.badge {
-  font-weight: 500;
-  padding: 0.5em 0.75em;
-}
-
-/* Card styles */
-.card.bg-light {
-  background-color: #f8f9fa !important;
-}
-
-/* Modal animation */
-.modal.fade.show {
-  animation: fadeIn 0.15s ease-in;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-/* Responsive styles */
-@media (max-width: 768px) {
-  .table {
-    font-size: 0.875rem;
-  }
-
-  .badge {
-    font-size: 0.75rem;
-  }
-
-  .modal-dialog {
-    margin: 0.5rem;
-  }
-}
+<style lang="scss">
+  @use '@/assets/main.scss' as *;
 </style>
+
