@@ -1,7 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useKeyManagement } from '@/mock/useKeyManagement'
-
 import NavigationBar from '@/components/NavigationBar.vue'
 
 const { keyRecords, loading, error, fetchKeyRecords, fetchExternalUserInfo } = useKeyManagement()
@@ -64,7 +63,7 @@ onMounted(async () => {
     <!-- Header -->
     <div class="row mb-4">
       <div class="col">
-        <h3 class="fw-bold mb-2">當前借用狀態</h3>
+        <h3 class="fw-bold mb-2">歷史借用紀錄</h3>
       </div>
     </div>
 
@@ -98,9 +97,10 @@ onMounted(async () => {
         <table class="table table-hover align-middle mb-0">
           <thead class="table-light">
             <tr>
-              <th class="border-0 ps-4">鑰匙編號</th>
-              <th class="border-0">借用人</th>
-              <th class="border-0 pe-4">借用時間</th>
+              <th class="border-0 px-4">鑰匙編號</th>
+              <th class="border-0 px-4">借用人</th>
+              <th class="border-0 px-4">借用時間</th>
+              <th class="border-0 px-4">歸還時間</th>
             </tr>
           </thead>
           <tbody>
@@ -121,6 +121,7 @@ onMounted(async () => {
                 </span>
               </td>
               <td class="pe-4">{{ record.formattedBorrowTime }}</td>
+              <td class="pe-4">{{ record.formattedReturnTime || '未歸還' }}</td>
             </tr>
           </tbody>
         </table>
