@@ -10,6 +10,18 @@ const mockKeyRecords = [
       type: 'student',
     },
     borrowTime: '2025-02-03T09:30:00',
+    returnTime: '2025-02-04T09:30:00',
+  },
+  {
+    id: 'K001',
+    keyNumber: 'R521',
+    borrower: {
+      uid: '109598001',
+      name: '王大名',
+      type: 'teacher',
+    },
+    borrowTime: '2025-02-04T09:30:00',
+    returnTime: '2025-02-04T10:30:00',
   },
   {
     id: 'K002',
@@ -30,6 +42,7 @@ const mockKeyRecords = [
       type: 'external',
     },
     borrowTime: '2025-02-03T13:00:00',
+    returnTime: '2025-02-04T13:00:00',
   },
   {
     id: 'K004',
@@ -86,6 +99,7 @@ export function useKeyManagement() {
       keyRecords.value = mockKeyRecords.map((record) => ({
         ...record,
         formattedBorrowTime: formatDateTime(record.borrowTime),
+        formattedReturnTime: record.returnTime ? formatDateTime(record.returnTime) : '尚未歸還',
       }))
     } catch (e) {
       error.value = '無法載入鑰匙借用記錄'

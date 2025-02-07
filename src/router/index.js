@@ -4,6 +4,8 @@ import HomeView from '@/views/HomeView.vue'
 import StatusView from '@/views/StatusView.vue'
 import ReturnView from '@/views/ReturnView.vue'
 import BorrowView from '@/views/BorrowView.vue'
+import AdminView from '@/views/AdminView.vue'
+import KeyView from '@/views/KeyView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -35,6 +37,16 @@ const router = createRouter({
       path: '/status',
       name: 'status',
       component: StatusView,
+    },
+    {
+      path: '/admin',
+      name: 'admin',
+      component: AdminView,
+    },
+    {
+      path: '/admin_key',
+      name: 'admin_key',
+      component: KeyView,
     },
   ],
 })
