@@ -28,12 +28,6 @@ const handleSubmit = async (event) => {
 }
 
 const LoadData = () => {
-  const goal = document.getElementById('idd').value.trim()
-  if (!goal) {
-    alert('請輸入證件號碼')
-    return
-  }
-
   isSubmitting.value = true
   fetch()
     .then((response) => response.json())
@@ -41,8 +35,8 @@ const LoadData = () => {
       if (!data) {
         alert('查無此人 Data not found.')
       } else {
-        document.getElementById('fullname').value = data[1]
-        document.getElementById('yi').value = data[2]
+        document.getElementById('userName').value = data[1]
+        document.getElementById('affiliation').value = data[2]
         document.getElementById('email').value = data[3]
         document.getElementById('phone').value = data[4]
       }
@@ -64,13 +58,13 @@ const LoadData = () => {
       <input
         type="text"
         class="form-control"
-        id="keynumber"
-        name="keynumber"
+        id="keyId"
+        name="keyId"
         required
         placeholder="請輸入該教室的代號"
         pattern="[A-Za-z][0-9]{3,4}"
       />
-      <label for="keynumber">鑰匙編號</label>
+      <label for="keyId">鑰匙編號</label>
       <div class="invalid-feedback">請輸入有效的教室代號（如：G508）</div>
     </div>
 
@@ -79,12 +73,12 @@ const LoadData = () => {
       <input
         type="text"
         class="form-control"
-        id="fullname"
-        name="fullname"
+        id="userName"
+        name="userName"
         required
         placeholder="請輸入借用者姓名"
       />
-      <label for="fullname">全名</label>
+      <label for="userName">全名</label>
       <div class="invalid-feedback">請輸入借用者全名</div>
     </div>
 
@@ -92,12 +86,12 @@ const LoadData = () => {
       <input
         type="text"
         class="form-control"
-        id="yi"
-        name="yi"
+        id="affiliation"
+        name="affiliation"
         required
-        placeholder="請輸入工作單位"
+        placeholder="請輸入服務單位"
       />
-      <label for="yi">服務單位（如：NTU, NCCU）</label>
+      <label for="affiliation">服務單位（如：NTU, NCCU）</label>
       <div class="invalid-feedback">請輸入服務單位名稱</div>
     </div>
 
@@ -140,7 +134,7 @@ const LoadData = () => {
         placeholder="當前時間"
       />
       <label for="current-time">當前時間</label>
-      <input type="hidden" name="ts" :value="ts" />
+      <input type="hidden" name="borrowTime" :value="ts" />
     </div>
 
     <!-- 提交按鈕 -->

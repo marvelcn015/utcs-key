@@ -1,18 +1,9 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import { useKeyManagement } from '@/mock/useKeyManagement'
-
+import { useKeyManagement } from '@/mock/getKeyRecords'
 import NavigationBar from '@/components/NavigationBar.vue'
 
-const { keyRecords, loading, error, fetchKeyRecords, fetchExternalUserInfo } = useKeyManagement()
-
-// External user modal state management
-const externalUserModal = ref({
-  isVisible: false,
-  isLoading: false,
-  error: null,
-  data: null,
-})
+const { keyRecords, loading, error, fetchKeyRecords } = useKeyManagement()
 
 const userTypeMap = {
   student: '學生',
@@ -21,37 +12,17 @@ const userTypeMap = {
   external: '外部人員',
 }
 
-const getUserTypeName = (type) => userTypeMap[type] || type
-
-// Modal management
-const showExternalUserInfo = async (userId) => {
-  externalUserModal.value = {
-    isVisible: true,
-    isLoading: true,
-    error: null,
-    data: null,
+const getUserInfo = (borrower) => {
+  if (borrower.type === 'external') {
+    return {
+      name: borrower.userName,
+    }
   }
-
-  try {
-    const userInfo = await fetchExternalUserInfo(userId)
-    externalUserModal.value.data = userInfo
-  } catch (error) {
-    externalUserModal.value.error = error.message
-  } finally {
-    externalUserModal.value.isLoading = false
+  return {
+    name: `${borrower.schoolUid}`,
   }
 }
 
-const closeExternalUserModal = () => {
-  externalUserModal.value = {
-    isVisible: false,
-    isLoading: false,
-    error: null,
-    data: null,
-  }
-}
-
-// Lifecycle hooks
 onMounted(async () => {
   await fetchKeyRecords()
 })
@@ -98,120 +69,41 @@ onMounted(async () => {
         <table class="table table-hover align-middle mb-0">
           <thead class="table-light">
             <tr>
-              <th class="border-0 ps-4">鑰匙編號</th>
+              <th class="border-0 ps-4">借用編號</th>
+              <th class="border-0">鑰匙編號</th>
               <th class="border-0">借用人</th>
+              <th class="border-0">借用人類型</th>
               <th class="border-0 pe-4">借用時間</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="record in keyRecords" :key="record.id">
-              <td class="ps-4">{{ record.keyNumber }}</td>
+            <tr v-for="record in keyRecords" :key="record.usageId">
+              <td class="ps-4">{{ record.usageId }}</td>
+              <td>{{ record.keyId }}</td>
               <td>
-                <span v-if="record.borrower.type === 'external'">
-                  <a
-                    href="#"
-                    @click.prevent="showExternalUserInfo(record.borrower.uid)"
-                    class="text-primary text-decoration-none fw-bold"
-                    >{{ record.borrower.name }}</a
-                  >
-                </span>
-                <span v-else>{{ record.borrower.name }}</span>
-                <span class="badge bg-secondary ms-1">
-                  {{ getUserTypeName(record.borrower.type) }}
+                {{ getUserInfo(record.borrower).name }}
+              </td>
+              <td>
+                <span
+                  class="badge"
+                  :class="record.borrower.type === 'external' ? 'bg-warning' : 'bg-secondary'"
+                >
+                  {{ userTypeMap[record.borrower.type] }}
                 </span>
               </td>
               <td class="pe-4">{{ record.formattedBorrowTime }}</td>
             </tr>
+            <tr v-if="keyRecords.length === 0">
+              <td colspan="5" class="text-center py-4 text-muted">目前沒有進行中的借用記錄</td>
+            </tr>
           </tbody>
         </table>
-      </div>
-    </div>
-
-    <!-- External User Info Modal -->
-    <div
-      class="modal fade"
-      tabindex="-1"
-      :class="{ show: externalUserModal.isVisible }"
-      v-if="externalUserModal.isVisible"
-    >
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header border-bottom-0">
-            <h5 class="modal-title fw-bold">外部使用者資訊</h5>
-            <button type="button" class="btn-close" @click="closeExternalUserModal"></button>
-          </div>
-
-          <div class="modal-body">
-            <!-- Loading State -->
-            <div v-if="externalUserModal.isLoading" class="text-center py-4">
-              <div class="spinner-border text-dark" role="status">
-                <span class="visually-hidden">載入中...</span>
-              </div>
-            </div>
-
-            <!-- Error State -->
-            <div v-else-if="externalUserModal.error" class="alert alert-danger mb-0">
-              {{ externalUserModal.error }}
-            </div>
-
-            <!-- User Info -->
-            <div v-else-if="externalUserModal.data" class="card bg-light border-0">
-              <div class="card-body">
-                <div class="d-flex flex-column gap-3">
-                  <div>
-                    <div class="text-muted small mb-1">所屬機構</div>
-                    <div class="fw-medium">{{ externalUserModal.data.institution }}</div>
-                  </div>
-                  <div>
-                    <div class="text-muted small mb-1">電子郵件</div>
-                    <div class="fw-medium">
-                      <a
-                        :href="'mailto:' + externalUserModal.data.email"
-                        class="text-decoration-none"
-                      >
-                        {{ externalUserModal.data.email }}
-                      </a>
-                    </div>
-                  </div>
-                  <div>
-                    <div class="text-muted small mb-1">聯絡電話</div>
-                    <div class="fw-medium">
-                      {{ externalUserModal.data.phone }}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="modal-footer border-top-0">
-            <button
-              type="button"
-              class="btn btn-secondary btn-sm px-4"
-              @click="closeExternalUserModal"
-            >
-              關閉
-            </button>
-          </div>
-        </div>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.modal.show {
-  display: block;
-  background-color: rgba(0, 0, 0, 0.5);
-}
-
-.modal-dialog-centered {
-  display: flex;
-  align-items: center;
-  min-height: calc(100% - 1rem);
-}
-
-/* Table styles */
 .table-hover tbody tr:hover {
   background-color: rgba(0, 0, 0, 0.025);
 }
@@ -222,29 +114,9 @@ onMounted(async () => {
   vertical-align: middle;
 }
 
-/* Badge styles */
 .badge {
   font-weight: 500;
   padding: 0.5em 0.75em;
-}
-
-/* Card styles */
-.card.bg-light {
-  background-color: #f8f9fa !important;
-}
-
-/* Modal animation */
-.modal.fade.show {
-  animation: fadeIn 0.15s ease-in;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
 }
 
 /* Responsive styles */
@@ -255,10 +127,6 @@ onMounted(async () => {
 
   .badge {
     font-size: 0.75rem;
-  }
-
-  .modal-dialog {
-    margin: 0.5rem;
   }
 }
 </style>

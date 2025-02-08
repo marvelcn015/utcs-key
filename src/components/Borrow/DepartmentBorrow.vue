@@ -41,13 +41,13 @@ const handleSubmit = async (event) => {
       <input
         type="text"
         class="form-control"
-        id="keynumber"
-        name="keynumber"
+        id="keyId"
+        name="keyId"
         required
         placeholder="請輸入該教室的代號"
         pattern="[A-Za-z][0-9]{3,4}"
       />
-      <label for="keynumber">鑰匙編號</label>
+      <label for="keyId">鑰匙編號</label>
       <div class="invalid-feedback">請輸入有效的教室代號（如：G508）</div>
     </div>
 
@@ -56,12 +56,12 @@ const handleSubmit = async (event) => {
       <input
         type="text"
         class="form-control"
-        id="uid"
-        name="uid"
+        id="schoolUid"
+        name="schoolUid"
         required
         placeholder="請輸入借用者帳號"
       />
-      <label for="uid">校務系統帳號</label>
+      <label for="schoolUid">校務系統帳號</label>
       <div class="invalid-feedback">請輸入正確的校務系統帳號</div>
     </div>
 
@@ -70,12 +70,12 @@ const handleSubmit = async (event) => {
       <input
         type="password"
         class="form-control"
-        id="password"
-        name="password"
+        id="schoolPassword"
+        name="schoolPassword"
         required
         placeholder="請輸入借用者密碼"
       />
-      <label for="password">校務系統密碼</label>
+      <label for="schoolPassword">校務系統密碼</label>
       <div class="invalid-feedback">請輸入正確的校務系統密碼</div>
     </div>
 
@@ -91,7 +91,7 @@ const handleSubmit = async (event) => {
         placeholder="當前時間"
       />
       <label for="current-time">當前時間</label>
-      <input type="hidden" name="ts" :value="ts" />
+      <input type="hidden" name="borrowTime" :value="ts" />
     </div>
 
     <!-- 提交按鈕 -->
