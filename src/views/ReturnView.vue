@@ -62,8 +62,8 @@ onUnmounted(() => {
                 <input
                   type="text"
                   class="form-control"
-                  id="keynumber-return"
-                  name="keynumber"
+                  id="keyId-return"
+                  name="keyId"
                   required
                   placeholder="請輸入該教室的代號"
                   pattern="[A-Za-z][0-9]{3,4}"
@@ -72,7 +72,7 @@ onUnmounted(() => {
                   title="請輸入正確的教室代號格式，例如：G508"
                   autocomplete="off"
                 />
-                <label for="keynumber-return">鑰匙編號</label>
+                <label for="keyId-return">鑰匙編號</label>
                 <div class="invalid-feedback">請輸入有效的教室代號（如：G508）</div>
               </div>
 
@@ -88,7 +88,7 @@ onUnmounted(() => {
                   placeholder="當前時間"
                 />
                 <label for="current-time">當前時間</label>
-                <input type="hidden" name="ts" :value="ts" />
+                <input type="hidden" name="returnTime" :value="ts" />
               </div>
 
               <!-- 提交按鈕 -->

@@ -6,7 +6,7 @@ import ExternalBorrow from '@/components/Borrow/ExternalBorrow.vue'
 import { useTimeManager } from '@/utils/flushTime'
 
 const { ts, tsshow, startTimer, stopTimer } = useTimeManager()
-const activeTab = ref('internal')
+const activeTab = ref('department')
 
 const switchTab = (tab) => {
   activeTab.value = tab
@@ -40,11 +40,11 @@ onUnmounted(() => {
               <div class="nav nav-pills nav-justified" role="tablist">
                 <button
                   class="nav-link"
-                  :class="{ active: activeTab === 'internal' }"
-                  @click="switchTab('internal')"
+                  :class="{ active: activeTab === 'department' }"
+                  @click="switchTab('department')"
                   type="button"
                   role="tab"
-                  aria-selected="activeTab === 'internal'"
+                  aria-selected="activeTab === 'department'"
                 >
                   <i class="bi bi-person-badge me-2"></i>校務系統認證
                 </button>
@@ -64,7 +64,7 @@ onUnmounted(() => {
             <!-- 表單內容區域 -->
             <div class="tab-content">
               <Transition name="fade" mode="out-in">
-                <div v-if="activeTab === 'internal'" key="internal" class="tab-pane active">
+                <div v-if="activeTab === 'department'" key="department" class="tab-pane active">
                   <DepartmentBorrow :ts="ts" :tsshow="tsshow" />
                 </div>
                 <div v-else key="external" class="tab-pane active">
