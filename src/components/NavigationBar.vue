@@ -1,18 +1,45 @@
 <script setup>
-import { computed } from 'vue'
+import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
+const showAdminMenu = ref(false) // 控制管理選單的顯示狀態
+const showOtherMenu = ref(false) // 控制其他選單的顯示狀態
 
 const navItems = [
   { name: '借用 Borrow', path: '/borrow', icon: 'bi-box-arrow-in-right' },
   { name: '歸還 Return', path: '/return', icon: 'bi-box-arrow-in-left' },
   { name: '狀態 Status', path: '/status', icon: 'bi-clipboard-data' },
-  { name: '管理 Admin', path: '/admin', icon: 'bi-gear' },
-  { name: '其他 Others', path: '/others', icon: 'bi-three-dots' },
+  {
+    name: '管理 Admin',
+    path: '/admin',
+    icon: 'bi-gear',
+    subMenu: [{ name: '歸還紀錄', path: '/record' }],
+  },
+  {
+    name: '其他 Others',
+    path: '/others',
+    icon: 'bi-three-dots',
+    subMenu: [
+      { name: '管理員資料', path: '/control' },
+      { name: '報修', path: '/fix' },
+    ],
+  },
 ]
 
 const currentPath = computed(() => route.path)
+
+// 切換管理選單顯示
+const toggleAdminMenu = () => {
+  showAdminMenu.value = !showAdminMenu.value
+  showOtherMenu.value = false // 保證不會同時展開其他選單
+}
+
+// 切換其他選單顯示
+const toggleOtherMenu = () => {
+  showOtherMenu.value = !showOtherMenu.value
+  showAdminMenu.value = false // 保證不會同時展開管理選單
+}
 </script>
 
 <template>
@@ -41,14 +68,45 @@ const currentPath = computed(() => route.path)
       <div class="collapse navbar-collapse" id="navbarContent">
         <ul class="navbar-nav ms-auto mb-2 mb-md-0">
           <li v-for="item in navItems" :key="item.path" class="nav-item">
-            <RouterLink
-              :to="item.path"
-              class="nav-link d-flex align-items-center px-3 nav-link-animated"
-              :class="{ active: currentPath === item.path }"
-            >
-              <i :class="['bi', item.icon, 'me-2 nav-icon']"></i>
-              <span>{{ item.name }}</span>
-            </RouterLink>
+            <template v-if="item.subMenu">
+              <!-- 如果有子選單 -->
+              <a
+                href="#"
+                class="nav-link d-flex align-items-center px-3 nav-link-animated"
+                :class="{ active: currentPath === item.path }"
+                @click.prevent="item.name === '管理 Admin' ? toggleAdminMenu() : toggleOtherMenu()"
+              >
+                <i :class="['bi', item.icon, 'me-2 nav-icon']"></i>
+                <span>{{ item.name }}</span>
+                <i class="bi bi-chevron-down ms-2"></i>
+              </a>
+
+              <!-- 顯示對應的子選單 -->
+              <ul
+                v-if="
+                  (item.name === '管理 Admin' && showAdminMenu) ||
+                  (item.name === '其他 Others' && showOtherMenu)
+                "
+                class="dropdown-menu show"
+              >
+                <li v-for="subItem in item.subMenu" :key="subItem.path">
+                  <RouterLink :to="subItem.path" class="dropdown-item">
+                    {{ subItem.name }}
+                  </RouterLink>
+                </li>
+              </ul>
+            </template>
+
+            <template v-else>
+              <RouterLink
+                :to="item.path"
+                class="nav-link d-flex align-items-center px-3 nav-link-animated"
+                :class="{ active: currentPath === item.path }"
+              >
+                <i :class="['bi', item.icon, 'me-2 nav-icon']"></i>
+                <span>{{ item.name }}</span>
+              </RouterLink>
+            </template>
           </li>
         </ul>
       </div>
@@ -57,108 +115,21 @@ const currentPath = computed(() => route.path)
 </template>
 
 <style scoped>
-.navbar {
-  margin-bottom: 1.5rem;
-  padding: 0.75rem 0;
+/* 調整管理選單的樣式 */
+.dropdown-menu {
+  background-color: #343a40;
+  border: none;
+  padding: 0.5rem 0;
+  margin-top: 0.5rem;
 }
 
-.navbar-brand {
-  font-size: 1.25rem;
-  font-weight: 500;
-  position: relative;
-  overflow: hidden;
+.dropdown-item {
+  color: white;
+  padding: 0.5rem 1rem;
+  transition: background 0.2s ease;
 }
 
-.brand-icon {
-  transform: translateY(-1px);
-  transition: transform 0.3s ease;
-}
-
-.navbar-brand:hover .brand-icon {
-  transform: translateY(-1px) scale(1.1);
-}
-
-.nav-link-animated {
-  position: relative;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  padding-top: 0.625rem;
-  padding-bottom: 0.625rem;
-}
-
-.nav-link-animated::before {
-  content: '';
-  position: absolute;
-  bottom: 0.375rem;
-  left: 1rem;
-  right: 1rem;
-  height: 2px;
-  background-color: #fff;
-  transform: scaleX(0);
-  transition: transform 0.3s ease;
-  transform-origin: center;
-  border-radius: 2px;
-  opacity: 0;
-}
-
-.nav-link-animated:hover {
-  color: rgba(255, 255, 255, 0.95) !important;
-}
-
-.nav-link-animated:hover::before {
-  transform: scaleX(0.7);
-  opacity: 0.5;
-}
-
-.nav-link-animated.active {
-  color: #fff !important;
-}
-
-.nav-link-animated.active::before {
-  transform: scaleX(1);
-  opacity: 1;
-}
-
-.nav-icon {
-  transition: transform 0.3s ease;
-}
-
-.nav-link-animated:hover .nav-icon {
-  transform: translateY(-1px);
-}
-
-/* 為切換按鈕添加過渡效果 */
-.navbar-toggler {
-  transition: transform 0.2s ease;
-}
-
-.navbar-toggler:hover {
-  transform: scale(1.05);
-}
-
-.navbar-toggler:active {
-  transform: scale(0.95);
-}
-
-/* 響應式調整 */
-@media (max-width: 767.98px) {
-  .nav-link-animated {
-    padding: 0.75rem 1rem;
-  }
-
-  .nav-link-animated::before {
-    left: 0;
-    right: 0;
-    bottom: 0;
-  }
-
-  .nav-link-animated:hover::before {
-    transform: scaleX(1);
-  }
-}
-
-/* 添加導航展開/收起的過渡效果 */
-.navbar-collapse {
-  transition: height 0.35s ease;
+.dropdown-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
 }
 </style>
